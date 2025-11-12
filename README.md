@@ -1,179 +1,179 @@
 # x402 Payment Protocol Demo
 
-Official implementation of the x402 Payment Protocol - a Web3 payment system using HTTP 402 status codes for payment requirements.
+x402 Payment Protocolの公式実装 - HTTP 402ステータスコードを使用したWeb3決済システム
 
-## 🚀 Features
+## 🚀 機能
 
-- **x402 Protocol Implementation**: Full implementation of HTTP 402 Payment Required
-- **MetaMask Integration**: Signature-based payment authorization
-- **ETH Payments**: Real Sepolia Testnet transactions
-- **Signature Verification**: Two-factor authentication (signature + transaction)
-- **Transaction Tracking**: View payments on Etherscan
-- **Modern UI**: Clean, responsive interface with Tailwind CSS
+- **x402プロトコル実装**: HTTP 402 Payment Requiredの完全実装
+- **MetaMask統合**: 署名ベースの支払い承認
+- **ETH決済**: Sepolia Testnetでの実際のトランザクション
+- **署名検証**: 二要素認証（署名 + トランザクション）
+- **トランザクション追跡**: Etherscanで支払いを確認
+- **モダンUI**: Tailwind CSSによるクリーンでレスポンシブなインターフェース
 
-## 🛠️ Tech Stack
+## 🛠️ 技術スタック
 
-- **Next.js 15.5.6** - React framework with App Router
-- **wagmi v2** - React Hooks for Ethereum
-- **viem v2** - TypeScript Ethereum library
-- **x402 Package** - Official x402 protocol types
-- **Tailwind CSS v3** - Utility-first CSS framework
-- **TypeScript** - Type-safe development
+- **Next.js 15.5.6** - App Routerを使用したReactフレームワーク
+- **wagmi v2** - Ethereum用Reactフック
+- **viem v2** - TypeScript Ethereumライブラリ
+- **x402 Package** - x402プロトコルの公式型定義
+- **Tailwind CSS v3** - ユーティリティファーストCSSフレームワーク
+- **TypeScript** - 型安全な開発
 
-## 📋 Prerequisites
+## 📋 必要要件
 
-- Node.js 18+ and npm
-- MetaMask wallet extension
-- Sepolia Testnet ETH (get from [Sepolia Faucet](https://sepoliafaucet.com/))
-- WalletConnect Project ID (get from [WalletConnect Cloud](https://cloud.walletconnect.com))
+- Node.js 18以上とnpm
+- MetaMaskウォレット拡張機能
+- Sepolia Testnet ETH（[Sepolia Faucet](https://sepoliafaucet.com/)から入手）
+- WalletConnect Project ID（[WalletConnect Cloud](https://cloud.walletconnect.com)から取得）
 
-## 🔧 Installation
+## 🔧 インストール
 
-1. Clone the repository:
+1. リポジトリをクローン：
 ```bash
 git clone <repository-url>
 cd x402-demo-Vercel
 ```
 
-2. Install dependencies:
+2. 依存関係をインストール：
 ```bash
 npm install
 ```
 
-3. Create `.env.local` file:
+3. `.env.local`ファイルを作成：
 ```bash
 cp .env.example .env.local
 ```
 
-4. Configure environment variables in `.env.local`:
+4. `.env.local`で環境変数を設定：
 ```env
 NEXT_PUBLIC_FIXED_ADDRESS=0xYourWalletAddress
 NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your_project_id
 ```
 
-5. Run development server:
+5. 開発サーバーを起動：
 ```bash
 npm run dev
 ```
 
-6. Open [http://localhost:3000](http://localhost:3000)
+6. [http://localhost:3000](http://localhost:3000)を開く
 
-## 🌐 Deploying to Vercel
+## 🌐 Vercelへのデプロイ
 
-### Option 1: Deploy with Vercel CLI
+### 方法1: Vercel CLIでデプロイ
 
-1. Install Vercel CLI:
+1. Vercel CLIをインストール：
 ```bash
 npm i -g vercel
 ```
 
-2. Deploy:
+2. デプロイ：
 ```bash
 vercel
 ```
 
-3. Add environment variables in Vercel dashboard:
+3. Vercelダッシュボードで環境変数を追加：
    - `NEXT_PUBLIC_FIXED_ADDRESS`
    - `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID`
 
-### Option 2: Deploy via GitHub
+### 方法2: GitHub経由でデプロイ
 
-1. Push to GitHub:
+1. GitHubにプッシュ：
 ```bash
 git add .
 git commit -m "Add x402 protocol implementation"
 git push origin main
 ```
 
-2. Go to [vercel.com](https://vercel.com)
-3. Click "New Project"
-4. Import your GitHub repository
-5. Add environment variables
-6. Click "Deploy"
+2. [vercel.com](https://vercel.com)にアクセス
+3. "New Project"をクリック
+4. GitHubリポジトリをインポート
+5. 環境変数を追加
+6. "Deploy"をクリック
 
-## 🔄 How x402 Protocol Works
+## 🔄 x402プロトコルの仕組み
 
-1. **Client requests protected resource** → Server returns `402 Payment Required`
-2. **User signs payment authorization message** (no gas required)
-3. **User sends ETH transaction** to recipient address
-4. **Server verifies signature and payment** → Grants access to content
+1. **クライアントが保護されたリソースをリクエスト** → サーバーが`402 Payment Required`を返す
+2. **ユーザーが支払い承認メッセージに署名** （ガス代不要）
+3. **ユーザーがETHトランザクションを送信** 受取アドレスへ
+4. **サーバーが署名と支払いを検証** → コンテンツへのアクセスを許可
 
-## 📁 Project Structure
+## 📁 プロジェクト構造
 
 ```
 src/
 ├── app/
 │   ├── api/
-│   │   └── protected/         # x402 protected endpoint
-│   ├── x402-demo/            # Demo page
-│   ├── layout.tsx            # Root layout with providers
-│   └── page.tsx              # Home page (redirects to demo)
+│   │   └── protected/         # x402保護エンドポイント
+│   ├── x402-demo/            # デモページ
+│   ├── layout.tsx            # プロバイダー付きルートレイアウト
+│   └── page.tsx              # ホームページ（デモへリダイレクト）
 ├── components/
-│   ├── connect-wallet-button.tsx  # Wallet connection
-│   └── x402-payment-button.tsx    # Payment flow
+│   ├── connect-wallet-button.tsx  # ウォレット接続
+│   └── x402-payment-button.tsx    # 支払いフロー
 ├── lib/
-│   ├── providers.tsx         # wagmi/WalletConnect providers
+│   ├── providers.tsx         # wagmi/WalletConnectプロバイダー
 │   └── x402/
-│       └── utils.ts          # x402 utility functions
-└── wagmi.ts                  # wagmi configuration
+│       └── utils.ts          # x402ユーティリティ関数
+└── wagmi.ts                  # wagmi設定
 ```
 
-## 🔑 Key Files
+## 🔑 主要ファイル
 
-- **[/src/app/api/protected/route.ts](src/app/api/protected/route.ts)** - x402 protocol implementation
-- **[/src/components/x402-payment-button.tsx](src/components/x402-payment-button.tsx)** - Payment flow
-- **[/src/lib/x402/utils.ts](src/lib/x402/utils.ts)** - Payment requirements creation
+- **[/src/app/api/protected/route.ts](src/app/api/protected/route.ts)** - x402プロトコル実装
+- **[/src/components/x402-payment-button.tsx](src/components/x402-payment-button.tsx)** - 支払いフロー
+- **[/src/lib/x402/utils.ts](src/lib/x402/utils.ts)** - Payment Requirements生成
 
-## 🧪 Testing
+## 🧪 テスト方法
 
-1. Connect MetaMask to Sepolia Testnet
-2. Get test ETH from [Sepolia Faucet](https://sepoliafaucet.com/)
-3. Visit the demo page
-4. Click "Connect Wallet"
-5. Click "Pay with x402"
-6. Sign the authorization message
-7. Confirm the ETH transaction
-8. Wait for confirmation
-9. Access premium content!
+1. MetaMaskをSepolia Testnetに接続
+2. [Sepolia Faucet](https://sepoliafaucet.com/)からテストETHを入手
+3. デモページにアクセス
+4. "Connect Wallet"をクリック
+5. "Pay with x402"をクリック
+6. 承認メッセージに署名
+7. ETHトランザクションを確認
+8. 確認を待つ
+9. プレミアムコンテンツにアクセス！
 
-## 📝 Environment Variables
+## 📝 環境変数
 
-| Variable | Description | Required |
+| 変数名 | 説明 | 必須 |
 |----------|-------------|----------|
-| `NEXT_PUBLIC_FIXED_ADDRESS` | Wallet address for receiving payments | Yes |
-| `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` | WalletConnect project ID | Yes |
-| `X402_FACILITATOR_URL` | x402 Facilitator URL (optional) | No |
+| `NEXT_PUBLIC_FIXED_ADDRESS` | 支払いを受け取るウォレットアドレス | はい |
+| `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` | WalletConnectプロジェクトID | はい |
+| `X402_FACILITATOR_URL` | x402ファシリテーターURL（オプション） | いいえ |
 
-## 🐛 Troubleshooting
+## 🐛 トラブルシューティング
 
-### Transaction Failed
-- Make sure you have enough Sepolia ETH
-- Check MetaMask is connected to Sepolia Testnet
+### トランザクション失敗
+- Sepolia ETHが十分にあることを確認
+- MetaMaskがSepolia Testnetに接続されているか確認
 
-### Signature Verification Failed
-- Refresh the page and start over
-- Make sure the same wallet signs and sends transaction
+### 署名検証失敗
+- ページをリフレッシュして最初からやり直す
+- 同じウォレットで署名とトランザクション送信を行っているか確認
 
-### Build Errors
-- Delete `.next` folder and `node_modules`
-- Run `npm install` again
-- Try `npm run build`
+### ビルドエラー
+- `.next`フォルダと`node_modules`を削除
+- `npm install`を再実行
+- `npm run build`を試す
 
-## 📄 License
+## 📄 ライセンス
 
 MIT
 
-## 🤝 Contributing
+## 🤝 コントリビューション
 
-Contributions are welcome! Please open an issue or submit a pull request.
+コントリビューションを歓迎します！IssueやPull Requestをお気軽にどうぞ。
 
-## 🔗 Links
+## 🔗 リンク
 
-- [x402 Protocol Documentation](https://x402.org)
-- [wagmi Documentation](https://wagmi.sh)
-- [Next.js Documentation](https://nextjs.org/docs)
+- [x402プロトコルドキュメント](https://x402.org)
+- [wagmiドキュメント](https://wagmi.sh)
+- [Next.jsドキュメント](https://nextjs.org/docs)
 - [Sepolia Faucet](https://sepoliafaucet.com/)
 
 ---
 
-Built with ❤️ using x402 Protocol
+x402 Protocolで❤️を込めて開発
