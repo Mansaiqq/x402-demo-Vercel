@@ -1,13 +1,12 @@
 'use client'
 
 import { useState } from 'react'
-import { ConnectWalletButton } from '@/components/connect-wallet-button'
 import { X402PaymentButton } from '@/components/x402-payment-button'
 import { useAccount } from 'wagmi'
 
 export default function X402DemoPage() {
   const [content, setContent] = useState<any>(null)
-  const { isConnected } = useAccount()
+  const { isConnected, address } = useAccount()
 
   const handlePaymentSuccess = (data: any) => {
     setContent(data)
@@ -28,21 +27,8 @@ export default function X402DemoPage() {
 
         {/* Main Content */}
         <div className="flex flex-col items-center gap-8">
-          {/* Connect Wallet Section */}
-          {!isConnected && !content && (
-            <div className="w-full max-w-md p-6 bg-gray-50 rounded-lg border border-gray-200">
-              <h2 className="text-xl font-semibold text-gray-900 mb-4 text-center">
-                Connect Wallet
-              </h2>
-              <p className="text-sm text-gray-600 mb-4 text-center">
-                Connect your wallet to access protected content
-              </p>
-              <ConnectWalletButton />
-            </div>
-          )}
-
-          {/* Payment Section */}
-          {isConnected && !content && (
+          {/* Payment Section - Show button regardless of connection status */}
+          {!content && (
             <div className="w-full max-w-md p-6 bg-gray-50 rounded-lg border border-gray-200">
               <h2 className="text-xl font-semibold text-gray-900 mb-4 text-center">
                 Access Protected Content
@@ -50,6 +36,11 @@ export default function X402DemoPage() {
               <p className="text-sm text-gray-600 mb-4 text-center">
                 This content requires payment via the x402 protocol
               </p>
+              {isConnected && (
+                <p className="text-xs text-green-600 mb-3 text-center">
+                  ✓ Wallet connected: {address?.slice(0, 6)}...{address?.slice(-4)}
+                </p>
+              )}
               <X402PaymentButton onSuccess={handlePaymentSuccess} />
             </div>
           )}

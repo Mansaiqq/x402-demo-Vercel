@@ -1,7 +1,8 @@
 'use client'
 
 import { useState } from 'react'
-import { useSignMessage, useSendTransaction, useAccount } from 'wagmi'
+import { useSignMessage, useSendTransaction, useAccount, useConnect } from 'wagmi'
+import { injected } from 'wagmi/connectors'
 
 interface X402PaymentButtonProps {
   onSuccess?: (content: any) => void
@@ -12,7 +13,8 @@ export function X402PaymentButton({ onSuccess }: X402PaymentButtonProps) {
   const [error, setError] = useState<string | null>(null)
   const [paymentRequirements, setPaymentRequirements] = useState<any>(null)
 
-  const { address } = useAccount()
+  const { address, isConnected } = useAccount()
+  const { connectAsync } = useConnect()
   const { signMessageAsync } = useSignMessage()
   const { sendTransactionAsync } = useSendTransaction()
 
@@ -21,6 +23,15 @@ export function X402PaymentButton({ onSuccess }: X402PaymentButtonProps) {
     try {
       setIsLoading(true)
       setError(null)
+
+      // Step 0: Connect wallet if not connected
+      let currentAddress = address
+      if (!isConnected || !currentAddress) {
+        console.log('Step 0: Connecting wallet...')
+        const result = await connectAsync({ connector: injected() })
+        currentAddress = result.accounts[0]
+        console.log('Connected with address:', currentAddress)
+      }
 
       // Step 1: Request the protected resource to get payment requirements
       console.log('Step 1: Requesting protected resource...')
@@ -62,7 +73,7 @@ Signing this message authorizes the payment but does not execute the transaction
         // Step 5: Create payment payload
         const paymentPayload = {
           txHash,
-          from: address,
+          from: currentAddress,
           to: requirement.payTo,
           amount: amount.toString(),
           network: requirement.network,
