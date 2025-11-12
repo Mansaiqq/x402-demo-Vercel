@@ -14,7 +14,10 @@ export async function GET(request: NextRequest): Promise<NextResponse> {
   )
   const price = 0.001 * multiplier
 
-  const resource = 'http://localhost:3000/api/protected' as Resource
+  // Get the current URL dynamically (works in both local and production)
+  const protocol = request.headers.get('x-forwarded-proto') || 'http'
+  const host = request.headers.get('host') || 'localhost:3000'
+  const resource = `${protocol}://${host}/api/protected` as Resource
 
   const paymentRequirements = createExactPaymentRequirement(
     price,

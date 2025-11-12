@@ -12,7 +12,11 @@ export function getX402Version(): string {
  * Get the recipient address for payments
  */
 export function getRecipientAddress(): string {
-  return process.env.NEXT_PUBLIC_FIXED_ADDRESS || ''
+  const address = process.env.NEXT_PUBLIC_FIXED_ADDRESS
+  if (!address) {
+    throw new Error('NEXT_PUBLIC_FIXED_ADDRESS environment variable is not set')
+  }
+  return address
 }
 
 /**
