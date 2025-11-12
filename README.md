@@ -48,7 +48,6 @@ cp .env.example .env.local
 4. `.env.local`で環境変数を設定：
 ```env
 NEXT_PUBLIC_FIXED_ADDRESS=0xYourWalletAddress
-NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID=your_project_id
 ```
 
 5. 開発サーバーを起動：
@@ -74,7 +73,6 @@ vercel
 
 3. Vercelダッシュボードで環境変数を追加：
    - `NEXT_PUBLIC_FIXED_ADDRESS`
-   - `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID`
 
 ### 方法2: GitHub経由でデプロイ
 
@@ -93,10 +91,11 @@ git push origin main
 
 ## 🔄 x402プロトコルの仕組み
 
-1. **クライアントが保護されたリソースをリクエスト** → サーバーが`402 Payment Required`を返す
-2. **ユーザーが支払い承認メッセージに署名** （ガス代不要）
-3. **ユーザーがETHトランザクションを送信** 受取アドレスへ
-4. **サーバーが署名と支払いを検証** → コンテンツへのアクセスを許可
+1. **ユーザーが"Pay with x402"ボタンをクリック** → 自動的にMetaMask接続
+2. **クライアントが保護されたリソースをリクエスト** → サーバーが`402 Payment Required`を返す
+3. **ユーザーが支払い承認メッセージに署名** （ガス代不要）
+4. **ユーザーがETHトランザクションを送信** 受取アドレスへ
+5. **サーバーが署名と支払いを検証** → コンテンツへのアクセスを許可
 
 ## 📁 プロジェクト構造
 
@@ -126,14 +125,14 @@ src/
 
 ## 🧪 テスト方法
 
-1. MetaMaskをSepolia Testnetに接続
-2. [Sepolia Faucet](https://sepoliafaucet.com/)からテストETHを入手
+1. MetaMaskをBase Sepolia Testnetに接続
+2. [Base Sepolia Faucet](https://www.alchemy.com/faucets/base-sepolia)からテストETHを入手
 3. デモページにアクセス
-4. "Connect Wallet"をクリック
-5. "Pay with x402"をクリック
-6. 承認メッセージに署名
+4. **"Pay with x402"ボタンをクリック** （ウォレット未接続の場合、自動的に接続されます）
+5. MetaMask接続を承認
+6. 支払い承認メッセージに署名
 7. ETHトランザクションを確認
-8. 確認を待つ
+8. 10秒待機（トランザクション確認）
 9. プレミアムコンテンツにアクセス！
 
 ## 📝 環境変数
@@ -141,18 +140,23 @@ src/
 | 変数名 | 説明 | 必須 |
 |----------|-------------|----------|
 | `NEXT_PUBLIC_FIXED_ADDRESS` | 支払いを受け取るウォレットアドレス | はい |
-| `NEXT_PUBLIC_WALLETCONNECT_PROJECT_ID` | WalletConnectプロジェクトID | はい |
-| `X402_FACILITATOR_URL` | x402ファシリテーターURL（オプション） | いいえ |
+
+**注意:** 現在の実装ではWalletConnectを使用していません。MetaMaskの直接接続（injected connector）のみを使用しています。
 
 ## 🐛 トラブルシューティング
 
 ### トランザクション失敗
-- Sepolia ETHが十分にあることを確認
-- MetaMaskがSepolia Testnetに接続されているか確認
+- Base Sepolia ETHが十分にあることを確認
+- MetaMaskがBase Sepolia Testnetに接続されているか確認
 
 ### 署名検証失敗
 - ページをリフレッシュして最初からやり直す
 - 同じウォレットで署名とトランザクション送信を行っているか確認
+
+### ウォレット接続エラー
+- MetaMask拡張機能がインストールされているか確認
+- ブラウザでMetaMaskが有効になっているか確認
+- ページをリロードしてもう一度試す
 
 ### ビルドエラー
 - `.next`フォルダと`node_modules`を削除
